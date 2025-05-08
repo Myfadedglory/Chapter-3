@@ -1,27 +1,91 @@
 package com.example.chapter3.homework;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-/**
- * 使用 ViewPager 和 Fragment 做一个简单版的好友列表界面
- * 1. 使用 ViewPager 和 Fragment 做个可滑动界面
- * 2. 使用 TabLayout 添加 Tab 支持
- * 3. 对于好友列表 Fragment，使用 Lottie 实现 Loading 效果，在 5s 后展示实际的列表，要求这里的动效是淡入淡出
- */
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class Ch3Ex3Activity extends AppCompatActivity {
+
+    private ViewPager2 viewPager;
+    private TabLayout tabLayout;
+    private List<Fragment> fragmentList;
+    private List<String> tabTitleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ch3ex3);
 
+        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tab_layout);
 
+        initData();
+        initViewPager();
+    }
 
-        // TODO: ex3-1. 添加 ViewPager 和 Fragment 做可滑动界面
+    private void initData() {
+        fragmentList = new ArrayList<>();
+        tabTitleList = new ArrayList<>();
 
+        int count = 20; // 这里设置你想要传递的 count 值
 
+        // 添加两个固定的 Fragment
+        fragmentList.add(PlaceholderFragment.newInstance(count));
+        fragmentList.add(PlaceholderFragment.newInstance(count));
 
-        // TODO: ex3-2, 添加 TabLayout 支持 Tab
+        // 添加两个固定的标签
+        tabTitleList.add("好友列表" + "(" + count + ")");
+        tabTitleList.add("我的好友");
+    }
+
+    private void initViewPager() {
+        viewPager.setAdapter(new FragmentStateAdapter(getSupportFragmentManager(), getLifecycle()) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                return fragmentList.get(position);
+            }
+
+            @Override
+            public int getItemCount() {
+                return fragmentList.size();
+            }
+        });
+
+        // 将 TabLayout 和 ViewPager2 关联起来
+        for (int i = 0; i < tabTitleList.size(); i++) {
+            Objects.requireNonNull(tabLayout.getTabAt(i)).setText(tabTitleList.get(i));
+        }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
     }
 }

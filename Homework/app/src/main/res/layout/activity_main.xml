@@ -5,24 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/btn_ex1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ex1"/>
+        android:text="@string/ex1" />
 
     <Button
         android:id="@+id/btn_ex2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ex2"/>
+        android:text="@string/ex2" />
 
     <Button
         android:id="@+id/btn_ex3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ex3"/>
+        android:text="@string/ex3" />
 
 </LinearLayout>
